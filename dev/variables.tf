@@ -4,3 +4,10 @@ variable "cluster_name" {
   type        = string
   default     = "5star-mart"
 }
+
+## Route53 Domain 
+variable "eks_cluster_domain" {
+  type        = string
+  description = "Route53 domain for the cluster."
+  default     = "51bsd.click"
+}

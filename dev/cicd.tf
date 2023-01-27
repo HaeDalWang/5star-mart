@@ -53,3 +53,8 @@ data "aws_secretsmanager_secret" "argocd" {
 data "aws_secretsmanager_secret_version" "argocd" {
   secret_id = data.aws_secretsmanager_secret.argocd.id
 }
+
+## GithubAction 설정
+module "github-actoin" {
+  source = "./modules/github-action"
+}

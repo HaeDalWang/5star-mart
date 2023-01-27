@@ -45,3 +45,10 @@ module "eks_blueprints_kubernetes_addons" {
 
   tags = local.tags
 }
+## 스토리지 클래스 변경 gp3
+module "gp3-sc" {
+  source = "./modules/storageclass-gp3"
+  depends_on = [
+    module.eks_blueprints_kubernetes_addons
+  ]
+}
