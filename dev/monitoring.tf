@@ -2,7 +2,7 @@ module "kubeapp-prometheus" {
   source         = "github.com/aws-ia/terraform-aws-eks-blueprints//modules/kubernetes-addons?ref=v4.21.0"
   eks_cluster_id = module.eks_blueprints.eks_cluster_id
 
-  enable_kube_prometheus_stack      = true
+  enable_kube_prometheus_stack = true
   kube_prometheus_stack_helm_config = {
     set_sensitive = [
       {

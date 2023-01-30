@@ -39,7 +39,7 @@ module "kubeapp-argocd" {
 }
 
 #---------------------------------------------------------------
-# ArgoCD Admin Password credentials with AWS Secrets Manager
+# ArgoCD 어드민 비밀번호 AWS SecretManager 사용
 #---------------------------------------------------------------
 
 resource "bcrypt_hash" "argo" {
@@ -54,7 +54,9 @@ data "aws_secretsmanager_secret_version" "argocd" {
   secret_id = data.aws_secretsmanager_secret.argocd.id
 }
 
-## GithubAction 설정
-module "github-actoin" {
-  source = "./modules/github-action"
-}
+#---------------------------------------------------------------
+# Github Action
+#---------------------------------------------------------------
+# module "github-actoin" {
+#   source = "./modules/github-action"
+# }

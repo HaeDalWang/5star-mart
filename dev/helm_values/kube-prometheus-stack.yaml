@@ -5,7 +5,7 @@ prometheus:
     enabled: true
     ingressClassName: alb
     hosts:
-    - ""
+    - "prometheus.51bsd.click"
     pathType: Prefix
     annotations:
       alb.ingress.kubernetes.io/scheme: "internet-facing"
@@ -33,7 +33,7 @@ alertmanager:
     enabled: true
     ingressClassName: alb
     hosts:
-    - ""
+    - "alertmanager.51bsd.click"
     pathType: Prefix
     annotations:
       alb.ingress.kubernetes.io/scheme: "internet-facing"
@@ -54,13 +54,12 @@ alertmanager:
             requests:
               storage: 20Gi
 
-
 grafana:
   ingress:
     enabled: true
     ingressClassName: alb
     hosts:
-    - ""
+    - "grafana.51bsd.click"
     pathType: Prefix
     annotations:
       alb.ingress.kubernetes.io/scheme: "internet-facing"
@@ -89,27 +88,27 @@ grafana:
         options:
           path: /var/lib/grafana/dashboards/istio   
   dashboards:
-    istio:
-      istio-control-plane-dashboard:
-        gnetId: 7645
-        revision: 145
-        datasource: default
-      istio-mesh-dashboard:
-        gnetId: 7639
-        revision: 145
-        datasource: default
-      istio-performance-dashboard:
-        gnetId: 11829
-        revision: 145
-        datasource: default
-      istio-service-dashboard:
-        gnetId: 7636
-        revision: 145
-        datasource: default
-      istio-workload-dashboard:
-        gnetId: 7630
-        revision: 145
-        datasource: default
+  #   istio:
+  #     istio-control-plane-dashboard:
+  #       gnetId: 7645
+  #       revision: 145
+  #       datasource: default
+  #     istio-mesh-dashboard:
+  #       gnetId: 7639
+  #       revision: 145
+  #       datasource: default
+  #     istio-performance-dashboard:
+  #       gnetId: 11829
+  #       revision: 145
+  #       datasource: default
+  #     istio-service-dashboard:
+  #       gnetId: 7636
+  #       revision: 145
+  #       datasource: default
+  #     istio-workload-dashboard:
+  #       gnetId: 7630
+  #       revision: 145
+  #       datasource: default
 
 kubeApiServer:
   enabled: false

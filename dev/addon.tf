@@ -34,20 +34,22 @@ module "eks_blueprints_kubernetes_addons" {
   # Route53 Domain
   eks_cluster_domain = "51bsd.click"
   external_dns_helm_config = {
-    name       = "external-dns"
-    chart      = "external-dns"
-    repository = "https://charts.bitnami.com/bitnami"
-    version    = "6.13.1"
-    namespace  = "external-dns"
-    zoneIdFilter = var.eks_cluster_domain
-    txtOwnerId = var.cluster_name
+    name         = "external-dns"
+    chart        = "external-dns"
+    repository   = "https://charts.bitnami.com/bitnami"
+    version      = "6.13.1"
+    namespace    = "external-dns"
+    values = [templatefile("./helm_values/external_dns-values.yaml", {
+      txtOwnerId   = local.name
+      zoneIdFilter = var.eks_cluster_domain
+    })]
   }
 
   tags = local.tags
 }
 ## 스토리지 클래스 변경 gp3
-module "gp3-sc" {
-  source = "./modules/storageclass-gp3"
+module "gp3" {
+  source = "../modules/storageclass-gp3"
   depends_on = [
     module.eks_blueprints_kubernetes_addons
   ]
