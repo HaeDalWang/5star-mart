@@ -1,0 +1,33 @@
+## 컴포넌트 적용할 설정파일 시크릿
+existingObjstoreSecret: ${thanos_objconfig_secret_name}
+
+query:
+  stores:
+  - dnssrv+_grpc._tcp.prometheus-operated.monitoring.svc.cluster.local:10901
+  ingress:
+    enabled: true
+    ingressClassName: alb
+    hostname: "thanos-query.dev.51bsd.click"
+    pathType: Prefix
+    annotations:
+      alb.ingress.kubernetes.io/scheme: "internet-facing"
+      alb.ingress.kubernetes.io/target-type: "ip"
+      alb.ingress.kubernetes.io/listen-ports: "[{\"HTTP\": 80}, {\"HTTPS\": 443}]"
+      alb.ingress.kubernetes.io/backend-protocol: "HTTP"
+      alb.ingress.kubernetes.io/ssl-redirect: "443"
+      alb.ingress.kubernetes.io/group.name: "monitoring-alb-group"
+
+queryFrontend:
+  enabled: false
+
+storegateway:
+  enabled: true
+  serviceAccount:
+    annotations:
+      eks.amazonaws.com/role-arn: ${thanos_role_arn}
+      
+compactor:
+  enabled: true
+  serviceAccount:
+    annotations:
+      eks.amazonaws.com/role-arn: ${thanos_role_arn}

@@ -5,7 +5,7 @@ prometheus:
     enabled: true
     ingressClassName: alb
     hosts:
-    - "prometheus.51bsd.click"
+    - "prometheus-dev.51bsd.click"
     pathType: Prefix
     annotations:
       alb.ingress.kubernetes.io/scheme: "internet-facing"
@@ -22,18 +22,25 @@ prometheus:
     storageSpec:
       volumeClaimTemplate:
         spec:
-          storageClassName: gp3
           accessModes: ["ReadWriteOnce"]
           resources:
             requests:
               storage: 20Gi
-
+    serviceAccount:
+    annotations:
+      eks.amazonaws.com/role-arn: ${thanos_role_arn}          
+    thanos:
+      image: quay.io/thanos/thanos:v0.29.0
+      objectStorageConfig:
+        name: ${thanos_objconfig_secret_name}
+        key: thanos.yaml
+        
 alertmanager:
   ingress:
     enabled: true
     ingressClassName: alb
     hosts:
-    - "alertmanager.51bsd.click"
+    - "alertmanager-dev.51bsd.click"
     pathType: Prefix
     annotations:
       alb.ingress.kubernetes.io/scheme: "internet-facing"
@@ -44,22 +51,13 @@ alertmanager:
       alb.ingress.kubernetes.io/group.name: "monitoring-alb-group"
   serviceMonitor:
     selfMonitor: false
-  alertmanagerSpec:
-    storage:
-      volumeClaimTemplate:
-        spec:
-          storageClassName: gp3
-          accessModes: ["ReadWriteOnce"]
-          resources:
-            requests:
-              storage: 20Gi
 
 grafana:
   ingress:
     enabled: true
     ingressClassName: alb
     hosts:
-    - "grafana.51bsd.click"
+    - "grafana-dev.51bsd.click"
     pathType: Prefix
     annotations:
       alb.ingress.kubernetes.io/scheme: "internet-facing"
@@ -70,11 +68,14 @@ grafana:
       alb.ingress.kubernetes.io/group.name: "monitoring-alb-group"
   serviceMonitor:
     enabled: false
-
   sidecar:
     datasources:
-      defaultDatasourceEnabled: true
-
+      defaultDatasourceEnabled: false
+  additionalDataSources:
+  - name: default
+    type: prometheus
+    url: http://thanos-query.thanos.svc.cluster.local:9090
+    isDefault: true
   dashboardProviders:
     dashboardproviders.yaml:
       apiVersion: 1
@@ -88,27 +89,27 @@ grafana:
         options:
           path: /var/lib/grafana/dashboards/istio   
   dashboards:
-  #   istio:
-  #     istio-control-plane-dashboard:
-  #       gnetId: 7645
-  #       revision: 145
-  #       datasource: default
-  #     istio-mesh-dashboard:
-  #       gnetId: 7639
-  #       revision: 145
-  #       datasource: default
-  #     istio-performance-dashboard:
-  #       gnetId: 11829
-  #       revision: 145
-  #       datasource: default
-  #     istio-service-dashboard:
-  #       gnetId: 7636
-  #       revision: 145
-  #       datasource: default
-  #     istio-workload-dashboard:
-  #       gnetId: 7630
-  #       revision: 145
-  #       datasource: default
+    istio:
+      istio-control-plane-dashboard:
+        gnetId: 7645
+        revision: 145
+        datasource: default
+      istio-mesh-dashboard:
+        gnetId: 7639
+        revision: 145
+        datasource: default
+      istio-performance-dashboard:
+        gnetId: 11829
+        revision: 145
+        datasource: default
+      istio-service-dashboard:
+        gnetId: 7636
+        revision: 145
+        datasource: default
+      istio-workload-dashboard:
+        gnetId: 7630
+        revision: 145
+        datasource: default
 
 kubeApiServer:
   enabled: false

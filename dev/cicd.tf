@@ -1,5 +1,5 @@
 #---------------------------------------------------------------
-# Kubeapp Argocd 
+# ArgoCD 설치 및 어플레케이션 등록
 #---------------------------------------------------------------
 
 module "kubeapp-argocd" {
@@ -53,10 +53,3 @@ data "aws_secretsmanager_secret" "argocd" {
 data "aws_secretsmanager_secret_version" "argocd" {
   secret_id = data.aws_secretsmanager_secret.argocd.id
 }
-
-#---------------------------------------------------------------
-# Github Action
-#---------------------------------------------------------------
-# module "github-actoin" {
-#   source = "./modules/github-action"
-# }

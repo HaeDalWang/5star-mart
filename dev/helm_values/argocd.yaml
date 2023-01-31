@@ -10,7 +10,7 @@ server:
       alb.ingress.kubernetes.io/ssl-redirect: "443"
       alb.ingress.kubernetes.io/group.name: "monitoring-alb-group"
     hosts: 
-    - "argocd.51bsd.click"
+    - "argocd-dev.51bsd.click"
 configs:
   params:
     "server.insecure": true

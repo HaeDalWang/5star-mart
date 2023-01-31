@@ -1,3 +1,7 @@
+#---------------------------------------------------------------
+# 프로바이더 및 로컬 변수 지정
+#---------------------------------------------------------------
+
 provider "aws" {
   region = local.region
 }
@@ -21,13 +25,12 @@ data "aws_eks_cluster_auth" "this" {
 }
 
 locals {
-  # name = basename(path.cwd)
-  name = "5start-mart-dev"
-  # var.cluster_name is for Terratest
+  name         = "5start-mart-dev"
   cluster_name = coalesce(var.cluster_name, local.name)
   region       = "ap-northeast-2"
 
   tags = {
-    GithubRepo = "github.com/aws-ia/terraform-aws-eks-blueprints"
+    environment = "dev"
+    GithubRepo  = "github.com/aws-ia/terraform-aws-eks-blueprints"
   }
 }
