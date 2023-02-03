@@ -95,6 +95,11 @@ resource "aws_iam_role" "github" {
 POLICY
 }
 
-
-provider "bcrypt" {
+terraform {
+  required_providers {
+    bcrypt = {
+      source = "viktorradnai/bcrypt"
+      version = "0.1.2"
+    }
+  }
 }
