@@ -48,8 +48,7 @@ module "eks_blueprints_kubernetes_addons" {
   tags = local.tags
 }
 
-### gp3, githubaction, 분리해야함 작업중 
-module "test" {
-  source = "../modules/temp"
-
+### gp3 StorageClass
+module "storageclass-gp3" {
+  source = "./modules/gp3-sc"
 }

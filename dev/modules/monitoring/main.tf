@@ -30,7 +30,7 @@ module "kubeapp-monitoring" {
       value = jsondecode(data.aws_secretsmanager_secret_version.grafana.secret_string)["password"]
     }]
 
-    values = [templatefile("./helm_values/kube-prometheus-stack.yaml", {
+    values = [templatefile("../helm_values/kube-prometheus-stack.yaml", {
       thanos_role_arn              = aws_iam_role.thanos.arn
       thanos_objconfig_secret_name = "thanos-objstore-config"
     })]
@@ -46,7 +46,7 @@ module "kubeapp-monitoring" {
   # thanos_irsa_policies = []
   thanos_helm_config = {
     values = [
-      templatefile("./helm_values/thanos.yaml", {
+      templatefile("../helm_values/thanos.yaml", {
         thanos_objconfig_secret_name = kubernetes_secret_v1.thanos_object_store_config.metadata[0].name
         thanos_role_arn              = aws_iam_role.thanos.arn
       })

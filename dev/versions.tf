@@ -23,7 +23,7 @@ terraform {
       version = ">= 0.1.2"
     }
   }
-  # 테라폼 백엔드 설정 - key 값 앞에 접두사는 환경이름과 동일
+  # 테라폼 백엔드 설정
   backend "s3" {
     bucket         = "5star-mart-s3-tfstate"
     key            = "dev/terraform.tfstate"
