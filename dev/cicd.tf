@@ -12,7 +12,7 @@ module "kubeapp-argocd" {
         name  = "configs.secret.argocdServerAdminPassword"
         value = bcrypt_hash.argo.id
       }]
-    values  = [templatefile("../helm_values/argocd.yaml", {})]
+    values  = [templatefile("./helm_values/argocd.yaml", {})]
     timeout = "1200"
   }
 
@@ -93,13 +93,4 @@ resource "aws_iam_role" "github" {
   ]
 }
 POLICY
-}
-
-terraform {
-  required_providers {
-    bcrypt = {
-      source = "viktorradnai/bcrypt"
-      version = "0.1.2"
-    }
-  }
 }

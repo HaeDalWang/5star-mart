@@ -47,8 +47,3 @@ module "eks_blueprints_kubernetes_addons" {
 
   tags = local.tags
 }
-
-### gp3 StorageClass
-module "storageclass-gp3" {
-  source = "./modules/gp3-sc"
-}
