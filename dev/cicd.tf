@@ -18,15 +18,15 @@ module "kubeapp-argocd" {
 
   argocd_manage_add_ons = false
 
-  # # 어플리케이션 추가
-  # argocd_applications = {
-  #   addons = {
-  #     path               = "frontend"
-  #     repo_url           = "HaeDalWang/helmchart-test"
-  #     add_on_application = true
-  #     ssh_key_secret_name = "github-ssh-key"
-  #   }
-  # }
+  # 어플리케이션 추가
+  argocd_applications = {
+    osung-workload = {
+      path               = "frontend"
+      repo_url           = "HaeDalWang/helmchart-test"
+      add_on_application = true
+      # ssh_key_secret_name = "github-ssh-key"
+    }
+  }
   depends_on = [
     aws_ecr_repository.osung
   ]
@@ -55,8 +55,6 @@ data "aws_secretsmanager_secret_version" "argocd" {
 #---------------------------------------------------------------
 
 resource "aws_ecr_repository" "osung" {
-  # 추 후 어플리케이션 전부 배포시 사용
-  # for_each = toset(["osung-frontend","osung-ad","osung-recomend","osung-productcatalog","osung-cart","osung-shipping","osung-checkout","osung-currency","osung-payment","osung-email"])
   for_each = toset(["osung-frontend","osung-email"])
 
   name                 = each.key

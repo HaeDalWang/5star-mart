@@ -25,10 +25,10 @@ terraform {
   }
   # 테라폼 백엔드 설정
   backend "s3" {
-    bucket         = "osung-s3-tfstate"
+    bucket         = "5star-mart-s3-tfstate"
     key            = "dev/terraform.tfstate"
     region         = "ap-northeast-2"
-    dynamodb_table = "osung-TerraformStateLock"
+    dynamodb_table = "TerraformStateLock"
     encrypt        = true
   }
 }

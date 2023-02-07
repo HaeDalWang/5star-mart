@@ -41,7 +41,7 @@ module "eks_blueprints_kubernetes_addons" {
     namespace  = "external-dns"
     values = [templatefile("./helm_values/external_dns-values.yaml", {
       txtOwnerId   = local.name
-      zoneIdFilter = "도메인 넣어야함"
+      zoneIdFilter = "51bsd.click"
     })]
   }
 

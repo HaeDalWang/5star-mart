@@ -23,7 +23,7 @@ data "aws_eks_cluster_auth" "this" {
 }
 
 locals {
-  name         = "osung-dev"
+  name         = "5star-dev"
   environment = "dev"
   cluster_name = local.name
   region       = "ap-northeast-2"
