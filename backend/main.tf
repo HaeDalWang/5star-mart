@@ -13,7 +13,7 @@ provider "aws" {
 
 # 버킷 생성
 resource "aws_s3_bucket" "terraform_state" {
-  bucket = "5star-mart-s3-tfstate"
+  bucket = "osung-s3-tfstate"
 
   lifecycle {
     prevent_destroy = true
@@ -23,10 +23,10 @@ resource "aws_s3_bucket" "terraform_state" {
 # 백엔드 지정
 terraform {
   backend "s3" {
-    bucket         = "5star-mart-s3-tfstate"
+    bucket         = "osung-s3-tfstate"
     key            = "backend/terraform.tfstate"
     region         = "ap-northeast-2"
-    dynamodb_table = "TerraformStateLock"
+    dynamodb_table = "osung-TerraformStateLock"
     encrypt        = true
   }
 }
@@ -58,7 +58,7 @@ resource "aws_s3_bucket_public_access_block" "terraform_state" {
 }
 # Dynamodb 생성
 resource "aws_dynamodb_table" "terraform_locks" {
-  name         = "TerraformStateLock"
+  name         = "osung-TerraformStateLock"
   billing_mode = "PAY_PER_REQUEST"
   hash_key     = "LockID"
   attribute {
@@ -66,20 +66,3 @@ resource "aws_dynamodb_table" "terraform_locks" {
     type = "S"
   }
 }
-
-# resource "aws_iam_role" "terraform" {
-#   name = "terraform-role"
-#   assume_role_policy = jsonencode({
-#     Version = "2012-10-17"
-#     Statement = [
-#       {
-#         Action = "sts:AssumeRole"
-#         Effect = "Allow"
-#         Principal = {
-#           AWS = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:root"
-#         }
-#       },
-#     ]
-#   })
-#   managed_policy_arns = ["arn:aws:iam::aws:policy/AdministratorAccess"]
-# }

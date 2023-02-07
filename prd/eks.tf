@@ -7,10 +7,10 @@ module "vpc" {
   version = "~> 3.0"
   name    = local.name
   # 가용 영역 및 서브넷 cidr
-  cidr            = "172.19.0.0/16"
+  cidr            = "172.20.0.0/16"
   azs             = ["ap-northeast-2a", "ap-northeast-2b", "ap-northeast-2c"]
-  public_subnets  = ["172.19.0.0/22", "172.19.4.0/22", "172.19.8.0/22"]
-  private_subnets = ["172.19.100.0/22", "172.19.104.0/22", "172.19.108.0/22"]
+  public_subnets  = ["172.20.0.0/22", "172.20.4.0/22", "172.20.8.0/22"]
+  private_subnets = ["172.20.100.0/22", "172.20.104.0/22", "172.20.108.0/22"]
 
   enable_nat_gateway   = true
   single_nat_gateway   = true
@@ -51,7 +51,6 @@ module "eks_blueprints" {
   vpc_id             = module.vpc.vpc_id
   private_subnet_ids = module.vpc.private_subnets
 
-  cluster_endpoint_public_access  = true
   cluster_endpoint_private_access = true
 
   managed_node_groups = {

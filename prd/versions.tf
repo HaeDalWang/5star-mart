@@ -26,7 +26,7 @@ terraform {
   # 테라폼 백엔드 설정
   backend "s3" {
     bucket         = "osung-s3-tfstate"
-    key            = "dev/terraform.tfstate"
+    key            = "prd/terraform.tfstate"
     region         = "ap-northeast-2"
     dynamodb_table = "osung-TerraformStateLock"
     encrypt        = true

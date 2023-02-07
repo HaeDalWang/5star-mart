@@ -1,0 +1,16 @@
+server:
+  ingress:
+    enabled: true
+    ingressClassName: alb
+    annotations: 
+      alb.ingress.kubernetes.io/scheme: "internet-facing"
+      alb.ingress.kubernetes.io/target-type: "ip"
+      alb.ingress.kubernetes.io/listen-ports: "[{\"HTTP\": 80}, {\"HTTPS\": 443}]"
+      alb.ingress.kubernetes.io/backend-protocol: "HTTP"
+      alb.ingress.kubernetes.io/ssl-redirect: "443"
+      alb.ingress.kubernetes.io/group.name: "monitoring-alb-group"
+    hosts: 
+    - "argocd-dev.51bsd.click"
+configs:
+  params:
+    "server.insecure": true
