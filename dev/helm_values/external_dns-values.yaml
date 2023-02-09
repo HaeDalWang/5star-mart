@@ -1,6 +1,6 @@
 txtOwnerId: ${txtOwnerId}
-zoneIdFilters:
-  - ${zoneIdFilter}
+domainFilters: 
+  - ${domainFilters}
 policy: 'sync'
 aws:
   zoneType: 'public'

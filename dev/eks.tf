@@ -59,10 +59,10 @@ module "eks_blueprints" {
       node_group_name = "managed-ondemand"
       instance_types  = ["t3.large"]
       # ami_type        = "AL2_x86_64"
-      min_size        = 1
-      max_size        = 10
-      desired_size    = 1
-      subnet_ids      = module.vpc.private_subnets
+      min_size     = 1
+      max_size     = 10
+      desired_size = 2
+      subnet_ids   = module.vpc.private_subnets
     }
   }
 

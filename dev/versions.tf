@@ -16,11 +16,15 @@ terraform {
     }
     random = {
       source  = "hashicorp/random"
-      version = "3.3.2"
+      version = ">= 3.3.2"
     }
     bcrypt = {
       source  = "viktorradnai/bcrypt"
       version = ">= 0.1.2"
+    }
+    kubectl = {
+      source  = "gavinbunney/kubectl"
+      version = ">= 1.14.0"
     }
   }
   # 테라폼 백엔드 설정

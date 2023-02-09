@@ -24,8 +24,10 @@ data "aws_eks_cluster_auth" "this" {
 
 locals {
   name         = "5star-dev"
-  environment = "dev"
+  environment  = "dev"
   cluster_name = local.name
+  # Route53 Domain
+  cluster_domain = "osung.51bsd.click"
   region       = "ap-northeast-2"
 
   tags = {

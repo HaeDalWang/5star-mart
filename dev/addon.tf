@@ -30,20 +30,103 @@ module "eks_blueprints_kubernetes_addons" {
       }
     ]
   }
+
+  eks_cluster_domain  = local.cluster_domain
   enable_external_dns = true
-  # Route53 Domain
-  eks_cluster_domain = "51bsd.click"
   external_dns_helm_config = {
-    name       = "external-dns"
-    chart      = "external-dns"
-    repository = "https://charts.bitnami.com/bitnami"
-    version    = "6.13.1"
-    namespace  = "external-dns"
     values = [templatefile("./helm_values/external_dns-values.yaml", {
-      txtOwnerId   = local.name
-      zoneIdFilter = "51bsd.click"
+      txtOwnerId    = local.name
+      domainFilters = local.cluster_domain
     })]
   }
 
   tags = local.tags
+}
+
+#---------------------------------------------------------------
+# 기본 StorageClass 교체 
+#---------------------------------------------------------------
+
+# EBS CSI 드라이버를 사용하는 스토리지 클래스 gp3
+resource "kubernetes_storage_class" "ebs_sc" {
+  metadata {
+    name = "gp3"
+    annotations = {
+      "storageclass.kubernetes.io/is-default-class" : "true"
+    }
+  }
+  storage_provisioner = "ebs.csi.aws.com"
+  volume_binding_mode = "WaitForFirstConsumer"
+  parameters = {
+    type = "gp3"
+  }
+}
+# 기본값으로 생성된 스토리지 클래스 해제
+resource "kubernetes_annotations" "default_storageclass" {
+  api_version = "storage.k8s.io/v1"
+  kind        = "StorageClass"
+  force       = "true"
+  metadata {
+    name = "gp2"
+  }
+  annotations = {
+    "storageclass.kubernetes.io/is-default-class" = "false"
+  }
+  depends_on = [
+    kubernetes_storage_class.ebs_sc
+  ]
+}
+
+#---------------------------------------------------------------
+# 도메인 인증서 부분
+#---------------------------------------------------------------
+
+# 운영시 사용할 Route53 하위 도메인 
+data "aws_route53_zone" "osung_domain" {
+  name         = local.cluster_domain
+  private_zone = false
+}
+# 상위 도메인
+data "aws_route53_zone" "root_domain" {
+  name         = "51bsd.click"
+  private_zone = false
+}
+# ACM 인증서 발급
+resource "aws_acm_certificate" "acm_osung_certification" {
+  domain_name       = "*.${data.aws_route53_zone.osung_domain.name}"
+  validation_method = "DNS"
+}
+
+# 루트도메인의 ACM 하위 인증서 레코드 추가
+resource "aws_route53_record" "osung_acm_recode" {
+  for_each = {
+    for dvo in aws_acm_certificate.acm_osung_certification.domain_validation_options : dvo.domain_name => {
+      name   = dvo.resource_record_name
+      record = dvo.resource_record_value
+      type   = dvo.resource_record_type
+    }
+  }
+
+  allow_overwrite = true
+  name            = each.value.name
+  records         = [each.value.record]
+  ttl             = 60
+  type            = each.value.type
+  zone_id         = data.aws_route53_zone.root_domain.zone_id
+}
+
+# 상위도메인의 하위도메인 NS레코드 추가
+resource "aws_route53_record" "osung_ns_recode" {
+  allow_overwrite = true
+  name            = "osung"
+  ttl             = 172800
+  type            = "NS"
+  zone_id         = data.aws_route53_zone.root_domain.zone_id
+
+  records = [
+    data.aws_route53_zone.osung_domain.name_servers[0],
+    data.aws_route53_zone.osung_domain.name_servers[1],
+    data.aws_route53_zone.osung_domain.name_servers[2],
+    data.aws_route53_zone.osung_domain.name_servers[3],
+  ]
 }
