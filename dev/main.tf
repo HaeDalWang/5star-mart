@@ -28,7 +28,7 @@ locals {
   cluster_name = local.name
   # Route53 Domain
   cluster_domain = "osung.51bsd.click"
-  region       = "ap-northeast-2"
+  region         = "ap-northeast-2"
 
   tags = {
     environment = "dev"

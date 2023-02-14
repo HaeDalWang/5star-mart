@@ -5,7 +5,7 @@ prometheus:
     enabled: true
     ingressClassName: alb
     hosts:
-    - "prometheus-dev.51bsd.click"
+    - "prometheus.osung.51bsd.click"
     pathType: Prefix
     annotations:
       alb.ingress.kubernetes.io/scheme: "internet-facing"
@@ -40,7 +40,7 @@ alertmanager:
     enabled: true
     ingressClassName: alb
     hosts:
-    - "alertmanager-dev.51bsd.click"
+    - "alertmanager.osung.51bsd.click"
     pathType: Prefix
     annotations:
       alb.ingress.kubernetes.io/scheme: "internet-facing"
@@ -57,7 +57,7 @@ grafana:
     enabled: true
     ingressClassName: alb
     hosts:
-    - "grafana-dev.51bsd.click"
+    - "grafana.osung.51bsd.click"
     pathType: Prefix
     annotations:
       alb.ingress.kubernetes.io/scheme: "internet-facing"
