@@ -2,6 +2,7 @@
 # kube-prometheus-stack 설치
 #---------------------------------------------------------------
 
+## 여러 클러스터가 사용시 다른 쪽은 resource대신 data를 사용하자
 resource "aws_s3_bucket" "thanos" {
   bucket = "5starmart-thanos-storage"
 }
@@ -49,6 +50,7 @@ module "kubeapp-monitoring" {
 
 #     values = [templatefile("./helm_values/kube-prometheus-stack.yaml", {
 #       thanos_role_arn              = aws_iam_role.thanos.arn
+
 #       thanos_objconfig_secret_name = kubernetes_secret_v1.prometheus_object_store_config.metadata[0].name
 #     })]
 
@@ -99,6 +101,7 @@ resource "kubernetes_secret_v1" "prometheus_object_store_config" {
         bucket   = aws_s3_bucket.thanos.bucket
         endpoint = replace(aws_s3_bucket.thanos.bucket_regional_domain_name, "${aws_s3_bucket.thanos.bucket}.", "")
       }
+      prefix = local.environment
     })
   }
 }
@@ -116,6 +119,7 @@ resource "kubernetes_secret_v1" "thanos_object_store_config" {
         bucket   = aws_s3_bucket.thanos.bucket
         endpoint = replace(aws_s3_bucket.thanos.bucket_regional_domain_name, "${aws_s3_bucket.thanos.bucket}.", "")
       }
+      prefix = local.environment
     })
   }
 }
