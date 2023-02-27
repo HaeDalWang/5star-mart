@@ -53,7 +53,8 @@ module "eks_blueprints" {
 
   cluster_endpoint_public_access  = true
   cluster_endpoint_private_access = true
-
+  cluster_enabled_log_types = null
+    
   managed_node_groups = {
     mg_5 = {
       node_group_name = "managed-ondemand"
